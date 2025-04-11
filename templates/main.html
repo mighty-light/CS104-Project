@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>About the Website</h2>
+<p>
+    Our log analysis tool helps you understand your system logs better. You can see patterns, 
+    find problems, and check your system's status with our simple visualization and filtering options.
+    We offer a user-friendly interface that allows downloading simple custom analytics on the logs.
+</p>
+
+
+<h3>Key Features</h3>
+<ul>
+    <li> Conversion of log files to structured CSV format </li>
+    <li> Simple filtering and sorting capabilities </li>
+    <li> Data visualization through plots</li>
+    <li> Intuitive interface for easy navigation</li>
+</ul>
+       
+
+<h3>Getting Started</h3>
+<p>
+Upload your log files on the upload page of this website: localhost/upload and choose the appropriate format of your log file.
+Next, navigate to localhost/table to view your logs in a table format and perform simple filtering. You may generate plots
+from the uploaded logs by navigating to localhost/plot and choosing the type of graph to be plotted.
+Currently, following formats are supported:
+<ul>
+    <li>Apache logs   </li>
+    <li>Android logs  </li>
+    <li>Syslog (Linux)</li>
+</p>
+
+<span style="color:rgb(180, 0, 0); font-weight: bold">Note:</span> You cannot plot a graph in localhost/plots before producing the structured CSV file from localhost/table.
+
+
+{% endblock content %}
