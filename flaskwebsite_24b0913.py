@@ -205,15 +205,15 @@ def create_plots(filepath, extension='jpeg', kind=None):
     if kind == 'apache':
         # Add custom font formatting
         title_font = {'family': 'serif', 'color': 'darkblue', 'weight': 'bold', 'size': 16,}
-        plt.subplot(1, 3, 1)
+        plt.subplot(3, 1, 1)
         plt.plot(event_times, range(len(event_times)), "bo-")
         plt.title('Events logged with time', fontdict=title_font)
 
-        plt.subplot(1, 3, 2)
+        plt.subplot(3, 1, 2)
         plt.pie(level_state.values(), labels=level_state.keys())
         plt.title('Level State Distribution', fontdict=title_font)
 
-        plt.subplot(1, 3, 3)
+        plt.subplot(3, 1, 3)
         plt.bar(event_id.keys(), event_id.values())
         plt.title('Event Code Distribution', fontdict=title_font)
         plt.tight_layout()
