@@ -234,7 +234,32 @@ def draw_apache_plot(filepath, title_font=None):
     plt.title('Event Code Distribution', fontdict=title_font)
 
 def draw_android_plot(filepath, title_font=None):
-    ...
+    level_state = {}
+    event_times = []
+    component = []
+
+    with open(filepath) as filtered_csv_file:
+        reader = csv.DictReader(filtered_csv_file)
+        for row in reader:
+            date = row['Date'].split('-')
+            date = date[0] + " " + date[1] + " " + row['Time'].split('.')[0]
+            event_times.append(convert_to_datetime(date, kind='android'))
+            component.append(row['Component'])
+            level_state.setdefault(row['Level'], 0)
+            level_state[row['Level']] += 1
+
+    plt.subplot(3, 1, 1)
+    plt.plot(event_times, component, "bo-")
+    plt.title('Event Component Over Time', fontdict=title_font)
+
+    plt.subplot(3, 1, 2)
+    plt.plot(event_times, range(len(event_times)), "bo-")
+    plt.title('Traffic trends', fontdict=title_font)
+
+    plt.subplot(3, 1, 3)
+    plt.pie(level_state.values(), labels=level_state.keys())
+    plt.title('Level Breakdown ', fontdict=title_font)
+    
 
 def draw_syslog_plot(filepath, title_font=None):
     level_state = {'combo' : 0}
@@ -255,9 +280,6 @@ def draw_syslog_plot(filepath, title_font=None):
     plt.pie(level_state.values(), labels=level_state.keys())
     plt.title('Level State Distribution', fontdict=title_font)
 
-    with open('debug.txt', 'w') as f:
-        print(log_src, file=f)
-
     plt.subplot(3, 1, 3)
     k = min(3, len(log_src))
     src, num = [*zip(*log_src.most_common(k))]
@@ -269,7 +291,10 @@ def convert_to_datetime(string, kind=None):
     month_to_number = {
     "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4,
     "May": 5, "Jun": 6, "Jul": 7, "Aug": 8,
-    "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12
+    "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
+    "01" : 1, "02" : 2, "03" : 3, "04" : 4,
+    "05" : 5, "06" : 6, "07" : 7, "08" : 8,
+    "09" : 9, "10" : 10, "11" : 11, "12" : 12
     }
     
     magic_bit = kind == 'apache'
