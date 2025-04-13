@@ -86,11 +86,13 @@ cursor: pointer;
 table {
     margin-left: 10%;
     margin-right: 10%;
-    width: 80%;
+    width: 80vw;
+    display: block;
+    overflow-x: scroll;
     border-collapse: collapse;
     font-family: sans-serif;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    }
+}
 
 thead tr {
 background-color: #009879;
@@ -100,6 +102,7 @@ text-align: left;
 
 th, td {
 padding: 12px 15px;
+text-wrap: wrap;
 }
 
 tbody tr {
