@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_FILE="$1"
-OUT_CSV="${LOG_FILE}_structured.csv"
+OUT_CSV="csv/$(basename "${LOG_FILE}")_structured.csv"
 
 ###################
 # Safety measures #

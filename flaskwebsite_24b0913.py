@@ -10,7 +10,7 @@ from datetime import datetime
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
-TIME_LADDER = ['year', 'month', 'day', 'hour', 'minute', 'second']
+TIME_LADDER = ['year', 'month', 'date', 'hour', 'minute', 'second']
 FROM_TIME_LADDER = [f"from_{TIME}" for TIME in TIME_LADDER]
 TO_TIME_LADDER = [f"to_{TIME}" for TIME in TIME_LADDER]
 STRUCTURED_CSV_FOLDER = 'csv'
@@ -33,6 +33,9 @@ def get_csv_path_from_data(file_data, filtered=False):
     if not filtered:
         return os.path.join(STRUCTURED_CSV_FOLDER, f"{file_data['name']}_structured.csv")
     return os.path.join(STRUCTURED_CSV_FOLDER, f"filtered_{file_data['name']}_structured.csv")
+
+def get_filter_script(file_data):
+    return os.path.join(FILTER_SCRIPT_FOLDER, f"{file_data['type']}_filter.sh")
 
 # Takes advantage of the fact that list comprehensions preserve order of ITERABLE
 def find_start_date():
@@ -148,7 +151,7 @@ def display_table(file_data):
 def prepare_filtered_csv_file(start_date, end_date, file_data):
     csv_file_path = get_csv_path_from_data(file_data).replace("\\", "/")
     filtered_csv = get_csv_path_from_data(file_data, filtered=True).replace("\\", "/")
-    filter_script = os.path.join(FILTER_SCRIPT_FOLDER, f"{file_data['type']}_filter.sh").replace("\\", "/")
+    filter_script = get_filter_script(file_data).replace("\\", "/")
 
     mode = (start_date != "") + 2 * (end_date != "")
 
