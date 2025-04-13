@@ -5,6 +5,7 @@ from flask import Flask, render_template
 from flask import request, send_file
 from werkzeug.utils import secure_filename
 from datetime import datetime
+from collections import Counter
 
 
 app = Flask(__name__)
@@ -193,8 +194,23 @@ def plots():
 
 def create_plots(filepath, extension='jpeg', kind=None):
     
-    plot_path = get_image_path(filepath, extension) 
-    
+    plot_path = get_image_path(filepath, extension)             
+    title_font = {'family': 'serif', 'color': 'darkblue', 'weight': 'bold', 'size': 16,}
+
+    if kind == 'apache':
+        draw_apache_plot(filepath, title_font=title_font)
+    elif kind == 'android':
+        draw_android_plot(filepath, title_font=title_font)
+    elif kind == 'syslog':
+        draw_syslog_plot(filepath, title_font=title_font)
+
+    os.makedirs(IMAGE_FOLDER, exist_ok=True)
+    plt.tight_layout()
+    plt.savefig(plot_path)
+    plt.show() # Remove in final version
+    return send_file(plot_path, as_attachment=True)
+
+def draw_apache_plot(filepath, title_font=None):
     level_state = { 'notice' : 0, 'error' : 0 }
     event_id = { 'E1' : 0, 'E2' : 0, 'E3' : 0, 'E4' : 0, 'E5' : 0, 'E6' : 0 }
     event_times = []
@@ -204,30 +220,49 @@ def create_plots(filepath, extension='jpeg', kind=None):
             level_state[row['Level']] += 1
             event_id[row['EventId']] += 1
             event_times.append(convert_to_datetime(row['Time'], kind='apache'))
-            
-    if kind == 'apache':
-        # Add custom font formatting
-        title_font = {'family': 'serif', 'color': 'darkblue', 'weight': 'bold', 'size': 16,}
-        plt.subplot(3, 1, 1)
-        plt.plot(event_times, range(len(event_times)), "bo-")
-        plt.title('Events logged with time', fontdict=title_font)
 
-        plt.subplot(3, 1, 2)
-        plt.pie(level_state.values(), labels=level_state.keys())
-        plt.title('Level State Distribution', fontdict=title_font)
+    plt.subplot(3, 1, 1)
+    plt.plot(event_times, range(len(event_times)), "bo-")
+    plt.title('Events logged with time', fontdict=title_font)
 
-        plt.subplot(3, 1, 3)
-        plt.bar(event_id.keys(), event_id.values())
-        plt.title('Event Code Distribution', fontdict=title_font)
-        plt.tight_layout()
-        
-        os.makedirs(IMAGE_FOLDER, exist_ok=True)
-        plt.savefig(plot_path)
+    plt.subplot(3, 1, 2)
+    plt.pie(level_state.values(), labels=level_state.keys())
+    plt.title('Level State Distribution', fontdict=title_font)
 
-        # Remove in final version
-        plt.show()
-     
-    return send_file(plot_path, as_attachment=True)
+    plt.subplot(3, 1, 3)
+    plt.bar(event_id.keys(), event_id.values())
+    plt.title('Event Code Distribution', fontdict=title_font)
+
+def draw_android_plot(filepath, title_font=None):
+    ...
+
+def draw_syslog_plot(filepath, title_font=None):
+    level_state = {'combo' : 0}
+    log_src = Counter()
+    event_times = []
+    with open(filepath) as filtered_csv_file:
+        reader = csv.DictReader(filtered_csv_file)
+        for row in reader:
+            level_state[row['Level']] += 1
+            log_src.update([row['Component']])
+            event_times.append(convert_to_datetime(" ".join((row['Month'], row['Date'], row['Time'])), kind='syslog'))
+    
+    plt.subplot(3, 1, 1)
+    plt.plot(event_times, range(len(event_times)), "bo-")
+    plt.title('Events logged with time', fontdict=title_font)
+
+    plt.subplot(3, 1, 2)
+    plt.pie(level_state.values(), labels=level_state.keys())
+    plt.title('Level State Distribution', fontdict=title_font)
+
+    with open('debug.txt', 'w') as f:
+        print(log_src, file=f)
+
+    plt.subplot(3, 1, 3)
+    k = min(3, len(log_src))
+    src, num = [*zip(*log_src.most_common(k))]
+    plt.bar(src, num)
+    plt.title('Top Log Sources', fontdict=title_font)
 
 
 def convert_to_datetime(string, kind=None):
@@ -236,15 +271,20 @@ def convert_to_datetime(string, kind=None):
     "May": 5, "Jun": 6, "Jul": 7, "Aug": 8,
     "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12
     }
+    
+    magic_bit = kind == 'apache'
 
+    date = string.split()
+    month = month_to_number[date[magic_bit]]
+    day = int(date[1+magic_bit])
+    hrs, mnt, sec = map(int, date[2+magic_bit].split(":"))
+    
     if kind == 'apache':
-        date = string.split()
         year = int(date[-1])
-        month = month_to_number[date[1]]
-        day = int(date[2])
-        hrs, mnt, sec = map(int, date[3].split(":"))
+    elif kind == 'syslog' or kind == 'android':
+        year = 1970
 
-        return datetime(year, month, day, hour=hrs, minute=mnt, second=sec)
+    return datetime(year, month, day, hour=hrs, minute=mnt, second=sec)
 
 
 #################################################################
