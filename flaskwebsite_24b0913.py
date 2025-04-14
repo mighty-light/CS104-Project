@@ -1,14 +1,15 @@
+import numpy as np
 import os, csv, subprocess
 import matplotlib.pyplot as plt
 from datetime import datetime
 from flask import Flask, render_template
 from flask import request, send_file
 from werkzeug.utils import secure_filename
-from datetime import datetime
 
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
+uploaded_files = []
 
 TIME_LADDER = ['year', 'month', 'date', 'hour', 'minute', 'second']
 FROM_TIME_LADDER = [f"from_{TIME}" for TIME in TIME_LADDER]
@@ -19,10 +20,6 @@ PARSER_FOLDER = 'Parser'
 FILTER_SCRIPT_FOLDER = 'Filter'
 IMAGE_FOLDER = 'img'
 SUPPORTED_LOG_FORMATS = ['apache', 'android', 'syslog']
-
-uploaded_files = []
-csv_headers_table = []
-rows_csv_table = []
 
 
 def get_image_path(filepath, extension):
@@ -41,19 +38,19 @@ def get_filter_script(file_data):
 
 def get_validator_path(kind):
     return os.path.join(VALIDATOR_FOLDER, f"{kind}_validator.sh")
-# Takes advantage of the fact that list comprehensions preserve order of ITERABLE
+
 def find_start_date():
+    """Get the FROM DATE for filtering from the form"""
     time_parts = [request.form.get(TIME) for TIME in FROM_TIME_LADDER]
     if "" in time_parts:
         return ""  
     return ":".join(time_parts)
 
-# Takes advantage of the fact that list comprehensions preserve order of ITERABLE
 def find_end_date():
+    """Get the TO DATE for filtering from the form"""
     time_parts = [request.form.get(TIME) for TIME in TO_TIME_LADDER]
     if "" in time_parts:
         return ""
-    
     return ":".join(time_parts)
 
 @app.route("/")
@@ -139,6 +136,9 @@ def auto_detect_log_type(filepath, name=None):
 
 @app.route("/table", methods=[ 'GET', 'POST' ])
 def table():
+    table_headings = []
+    table_rows = []
+
     if request.method == 'POST':
         if 'make-csv' in request.form:
             file_data = get_file_data('up_log_file')
@@ -147,8 +147,7 @@ def table():
         
         if 'show-table' in request.form:    
             file_data = get_file_data('csv_file')
-            display_table(file_data)
-        #   csv_headers_table, rows_csv_table = display_table(file_data)
+            table_headings, table_rows = display_table(file_data)
 
 
         if 'download-table' in request.form:
@@ -163,7 +162,7 @@ def table():
     has_csv = [file for file in uploaded_files if file['csv']]
     
     return render_template("table.html", title="View Table", file_info=valid_files,
-                           has_csv=has_csv, headers=csv_headers_table, rows=rows_csv_table)
+                           has_csv=has_csv, headers=table_headings, rows=table_rows)
 
 def make_structured_csv(file_data):
     os.makedirs(STRUCTURED_CSV_FOLDER, exist_ok=True)
@@ -177,15 +176,18 @@ def make_structured_csv(file_data):
 # Maybe add a hide table option?
 def display_table(file_data):
     csv_path = get_csv_path_from_data(file_data)
-    global csv_headers_table
-    global rows_csv_table
 
     with open(csv_path, "r") as file:
         csv_reader = csv.reader(file)
-        csv_headers_table = next(csv_reader)
-        rows_csv_table = list(csv_reader)
+        table_headings = next(csv_reader)
+        table_rows = list(csv_reader)
 
-#   return csv_headers_table, rows_csv_table
+# In case of tame log files like Apache, we can use the following approach
+#       header = next(file).strip().split(',')
+#       rows = [line.strip().split(',') for line in file]
+#       return header, rows
+
+    return table_headings, table_rows
 
 def prepare_filtered_csv_file(start_date, end_date, file_data):
     csv_file_path = get_csv_path_from_data(file_data).replace("\\", "/")
@@ -242,6 +244,7 @@ def create_plots(filepath, extension='jpeg', kind=None):
         draw_syslog_plot(filepath, title_font=title_font)
 
     os.makedirs(IMAGE_FOLDER, exist_ok=True)
+    plt.style.use('fivethirtyeight')
     plt.tight_layout()
     plt.savefig(plot_path)
     plt.show() # Remove in final version
@@ -252,7 +255,7 @@ def draw_apache_plot(filepath, title_font=None):
     event_id = { 'E1' : 0, 'E2' : 0, 'E3' : 0, 'E4' : 0, 'E5' : 0, 'E6' : 0 }
     event_times = []
     with open(filepath) as filtered_csv_file:
-        next(filtered_csv_file)
+        next(filtered_csv_file) 
         for line in filtered_csv_file:
             row = line.strip().split(',')
         #     0      1    2      3       4         5
@@ -279,11 +282,11 @@ def draw_android_plot(filepath, title_font=None):
     component = []
 
     with open(filepath) as filtered_csv_file:
-        next(filtered_csv_file)
+        next(filtered_csv_file) 
         for line in filtered_csv_file:
             row = line.strip().split(',')
         #     0     1     2   3   4    5       6
-        #   LineId,Date,Time,Pid,Tid,Level,Component,Content,EventId,EventTemplate   
+        #   LineId Date Time Pid Tid Level Component ...   
             date = row[1].split('-')
             date = date[0] + " " + date[1] + " " + row[2].split('.')[0]
             event_times.append(convert_to_datetime(date, kind='android'))
@@ -308,11 +311,11 @@ def draw_syslog_plot(filepath, title_font=None):
     log_src = {}
     event_times = []
     with open(filepath) as filtered_csv_file:
-        next(filtered_csv_file)
+        next(filtered_csv_file) 
         for line in filtered_csv_file:
             row = line.strip().split(',')
         #     0      1    2    3     4       5
-        #   LineId,Month,Date,Time,Level,Component,PID,Content,EventId,EventTemplate
+        #   LineId Month Date Time Level Component ...
             level_state.setdefault(row[4], 0)
             level_state[row[4]] += 1
 
@@ -338,33 +341,44 @@ def most_common(dictionary, k):
     return sorted(dictionary.items(), key=lambda x: x[1], reverse=True)[:k]
     
 def convert_to_datetime(string, kind=None):
-    month_to_number = {
-    "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4,
-    "May": 5, "Jun": 6, "Jul": 7, "Aug": 8,
-    "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
-    "01" : 1, "02" : 2, "03" : 3, "04" : 4,
-    "05" : 5, "06" : 6, "07" : 7, "08" : 8,
-    "09" : 9, "10" : 10, "11" : 11, "12" : 12
+    """Convert the different kinds of date strings from different types of log
+    files to a universal format (in this case np.datetime64)"""
+
+    month_to_str = {
+        "01": "01", "02": "02", "03": "03", "04": "04",
+        "05": "05", "06": "06", "07": "07", "08": "08",
+        "09": "09", "10": "10", "11": "11", "12": "12",
+        "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04",
+        "May": "05", "Jun": "06", "Jul": "07", "Aug": "08",
+        "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"
     }
-    
+
+    # Apache logs have day of the week as the second entry while the other logs
+    # have it as the first entry, therefore this space-saving hack
     magic_bit = kind == 'apache'
 
     date = string.split()
-    month = month_to_number[date[magic_bit]]
-    day = int(date[1+magic_bit])
-    hrs, mnt, sec = map(int, date[2+magic_bit].split(":"))
+    month = month_to_str[date[magic_bit]]
+    
+    if len(date[1+magic_bit]) == 1:
+        day = "0" + date[1+magic_bit]
+    else:
+        day = date[1+magic_bit]
+    
+    hrs, mnt, sec = date[2+magic_bit].split(":")
+    # Unnecessary in this implementation but
+    # was useful in the earlier versions using datetime
     
     if kind == 'apache':
-        year = int(date[-1])
+        year = date[-1]
     elif kind == 'syslog' or kind == 'android':
-        year = 1970
+        year = str(1970)
 
-    return datetime(year, month, day, hour=hrs, minute=mnt, second=sec)
+    return np.datetime64(year + '-' +  month + '-' +  day + 'T' + hrs + ':' + mnt + ':' + sec)
 
 
 #################################################################
 ######## MAYBE ADD CUSTOM INPUT FOR CREATING PLOTS ##############
-######## (OR ADD SUPPORT FOR OTHER FILES FIRST)    ##############
 ######## DRAG AND DROP FUNCTIONALITY               ##############
 #################################################################
 
