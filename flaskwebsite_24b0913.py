@@ -15,9 +15,11 @@ TIME_LADDER = ['year', 'month', 'date', 'hour', 'minute', 'second']
 FROM_TIME_LADDER = [f"from_{TIME}" for TIME in TIME_LADDER]
 TO_TIME_LADDER = [f"to_{TIME}" for TIME in TIME_LADDER]
 STRUCTURED_CSV_FOLDER = 'csv'
+VALIDATOR_FOLDER = 'Validator'
 PARSER_FOLDER = 'Parser'
 FILTER_SCRIPT_FOLDER = 'Filter'
 IMAGE_FOLDER = 'img'
+SUPPORTED_LOG_FORMATS = ['apache', 'android', 'syslog']
 
 uploaded_files = []
 csv_headers_table = []
@@ -38,6 +40,8 @@ def get_csv_path_from_data(file_data, filtered=False):
 def get_filter_script(file_data):
     return os.path.join(FILTER_SCRIPT_FOLDER, f"{file_data['type']}_filter.sh")
 
+def get_validator_path(kind):
+    return os.path.join(VALIDATOR_FOLDER, f"{kind}_validator.sh")
 # Takes advantage of the fact that list comprehensions preserve order of ITERABLE
 def find_start_date():
     time_parts = [request.form.get(TIME) for TIME in FROM_TIME_LADDER]
@@ -70,7 +74,6 @@ def upload():
 def upload_file():
     if 'uploaded_log' not in request.files:
         return False
-    
     log = request.files['uploaded_log']
     
     if secure_filename(log.filename) == '':
@@ -79,13 +82,18 @@ def upload_file():
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(log.filename))
     log.save(filepath)
-    run_bash_validator(filepath, name=secure_filename(log.filename), kind=request.form.get('log_type'))
+
+    kind = request.form.get('log_type')
+    if kind == 'auto':
+        auto_detect_log_type(filepath, name=secure_filename(log.filename))
+    else:
+        run_bash_validator(filepath, name=secure_filename(log.filename), kind=kind)
     return True
 
 # os.path.join will give windows version of the path but we need unix version for WSL
 def run_bash_validator(filepath, kind=None, name=None):
     wsl_file_path = filepath.replace("\\", "/")
-    validator_path = os.path.join("Validator", f"{kind}_validator.sh").replace("\\", "/")
+    validator_path = get_validator_path(kind).replace('\\', '/')
 
     bash_script = subprocess.run(
         ["wsl", validator_path, wsl_file_path], capture_output=True, text=True
@@ -99,6 +107,32 @@ def run_bash_validator(filepath, kind=None, name=None):
         'csv' : False,
     })
 
+def auto_detect_log_type(filepath, name=None):
+    valid_log_file = False
+    file_format = 'auto'
+    wsl_file_path = filepath.replace('\\', '/')
+
+    for format in SUPPORTED_LOG_FORMATS:
+        validator_path = get_validator_path(format).replace('\\', '/')
+
+        bash_script = subprocess.run(
+            ["wsl", validator_path, wsl_file_path], capture_output=True, text=True
+        )
+
+        if bash_script.returncode == 0:
+            valid_log_file = True
+            file_format = format
+            break
+    
+    uploaded_files.append({
+        'name' : name,
+        'type' : file_format,
+        'time' : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'valid': valid_log_file,
+        'csv' : False,
+    })
+        
+    
 
 ################################################################
 ##################### TABLE DISPLAY ############################
@@ -168,7 +202,6 @@ def download_filtered_table(file_data):
 ### NOTE: Much of the hard coding (if else) can be removed if we use the
 ### mktime() function of awk that will calculate the time from epoch.
 ### It will also work with weird date-time choices, e.g., daylight savings.
-### NOTE: The apache logs are automatically sorted by date.
 ### TODO: Add option to sort by some other column? [OPTIONAL]
 
 ################################################################
