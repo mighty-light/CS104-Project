@@ -5,7 +5,6 @@ from flask import Flask, render_template
 from flask import request, send_file
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from collections import Counter
 
 
 app = Flask(__name__)
@@ -96,7 +95,7 @@ def run_bash_validator(filepath, kind=None, name=None):
     validator_path = get_validator_path(kind).replace('\\', '/')
 
     bash_script = subprocess.run(
-        ["wsl", validator_path, wsl_file_path], capture_output=True, text=True
+        ["bash", validator_path, wsl_file_path], capture_output=True, text=True
     )
     
     uploaded_files.append({
@@ -116,7 +115,7 @@ def auto_detect_log_type(filepath, name=None):
         validator_path = get_validator_path(format).replace('\\', '/')
 
         bash_script = subprocess.run(
-            ["wsl", validator_path, wsl_file_path], capture_output=True, text=True
+            ["bash", validator_path, wsl_file_path], capture_output=True, text=True
         )
 
         if bash_script.returncode == 0:
@@ -149,6 +148,8 @@ def table():
         if 'show-table' in request.form:    
             file_data = get_file_data('csv_file')
             display_table(file_data)
+        #   csv_headers_table, rows_csv_table = display_table(file_data)
+
 
         if 'download-table' in request.form:
             start_date = find_start_date()
@@ -169,7 +170,7 @@ def make_structured_csv(file_data):
     parser_path = os.path.join(PARSER_FOLDER, f"log_parser_{file_data['type']}.sh").replace("\\", "/")
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_data['name']).replace("\\", "/")
     subprocess.run(
-        ["wsl", parser_path, file_path], capture_output=True, text=True
+        ["bash", parser_path, file_path], capture_output=True, text=True
     )    
     file_data['csv'] = True
 
@@ -178,10 +179,13 @@ def display_table(file_data):
     csv_path = get_csv_path_from_data(file_data)
     global csv_headers_table
     global rows_csv_table
+
     with open(csv_path, "r") as file:
         csv_reader = csv.reader(file)
         csv_headers_table = next(csv_reader)
         rows_csv_table = list(csv_reader)
+
+#   return csv_headers_table, rows_csv_table
 
 def prepare_filtered_csv_file(start_date, end_date, file_data):
     csv_file_path = get_csv_path_from_data(file_data).replace("\\", "/")
@@ -191,7 +195,7 @@ def prepare_filtered_csv_file(start_date, end_date, file_data):
     mode = (start_date != "") + 2 * (end_date != "")
 
     subprocess.run(
-        ["wsl", filter_script, str(mode), csv_file_path, filtered_csv, start_date, end_date], capture_output=True, text=True
+        ["bash", filter_script, str(mode), csv_file_path, filtered_csv, start_date, end_date], capture_output=True, text=True
     )  
 
 
@@ -248,11 +252,14 @@ def draw_apache_plot(filepath, title_font=None):
     event_id = { 'E1' : 0, 'E2' : 0, 'E3' : 0, 'E4' : 0, 'E5' : 0, 'E6' : 0 }
     event_times = []
     with open(filepath) as filtered_csv_file:
-        reader = csv.DictReader(filtered_csv_file)
-        for row in reader:
-            level_state[row['Level']] += 1
-            event_id[row['EventId']] += 1
-            event_times.append(convert_to_datetime(row['Time'], kind='apache'))
+        next(filtered_csv_file)
+        for line in filtered_csv_file:
+            row = line.strip().split(',')
+        #     0      1    2      3       4         5
+        #   LineId Time Level Content EventId EventTemplate
+            level_state[row[2]] += 1
+            event_id[row[4]] += 1
+            event_times.append(convert_to_datetime(row[1], kind='apache'))
 
     plt.subplot(3, 1, 1)
     plt.plot(event_times, range(len(event_times)), "bo-")
@@ -272,14 +279,17 @@ def draw_android_plot(filepath, title_font=None):
     component = []
 
     with open(filepath) as filtered_csv_file:
-        reader = csv.DictReader(filtered_csv_file)
-        for row in reader:
-            date = row['Date'].split('-')
-            date = date[0] + " " + date[1] + " " + row['Time'].split('.')[0]
+        next(filtered_csv_file)
+        for line in filtered_csv_file:
+            row = line.strip().split(',')
+        #     0     1     2   3   4    5       6
+        #   LineId,Date,Time,Pid,Tid,Level,Component,Content,EventId,EventTemplate   
+            date = row[1].split('-')
+            date = date[0] + " " + date[1] + " " + row[2].split('.')[0]
             event_times.append(convert_to_datetime(date, kind='android'))
-            component.append(row['Component'])
-            level_state.setdefault(row['Level'], 0)
-            level_state[row['Level']] += 1
+            component.append(row[6])
+            level_state.setdefault(row[5], 0)
+            level_state[row[5]] += 1
 
     plt.subplot(3, 1, 1)
     plt.plot(event_times, component, "bo-")
@@ -293,17 +303,23 @@ def draw_android_plot(filepath, title_font=None):
     plt.pie(level_state.values(), labels=level_state.keys())
     plt.title('Level Breakdown ', fontdict=title_font)
     
-
 def draw_syslog_plot(filepath, title_font=None):
     level_state = {'combo' : 0}
-    log_src = Counter()
+    log_src = {}
     event_times = []
     with open(filepath) as filtered_csv_file:
-        reader = csv.DictReader(filtered_csv_file)
-        for row in reader:
-            level_state[row['Level']] += 1
-            log_src.update([row['Component']])
-            event_times.append(convert_to_datetime(" ".join((row['Month'], row['Date'], row['Time'])), kind='syslog'))
+        next(filtered_csv_file)
+        for line in filtered_csv_file:
+            row = line.strip().split(',')
+        #     0      1    2    3     4       5
+        #   LineId,Month,Date,Time,Level,Component,PID,Content,EventId,EventTemplate
+            level_state.setdefault(row[4], 0)
+            level_state[row[4]] += 1
+
+            log_src.setdefault(row[5], 0)
+            log_src[row[5]] += 1
+
+            event_times.append(convert_to_datetime(" ".join((row[1], row[2], row[3])), kind='syslog'))
     
     plt.subplot(3, 1, 1)
     plt.plot(event_times, range(len(event_times)), "bo-")
@@ -314,12 +330,13 @@ def draw_syslog_plot(filepath, title_font=None):
     plt.title('Level State Distribution', fontdict=title_font)
 
     plt.subplot(3, 1, 3)
-    k = min(3, len(log_src))
-    src, num = [*zip(*log_src.most_common(k))]
+    src, num = [*zip(*most_common(log_src, 5))]
     plt.bar(src, num)
     plt.title('Top Log Sources', fontdict=title_font)
 
-
+def most_common(dictionary, k):
+    return sorted(dictionary.items(), key=lambda x: x[1], reverse=True)[:k]
+    
 def convert_to_datetime(string, kind=None):
     month_to_number = {
     "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4,
