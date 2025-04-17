@@ -206,25 +206,29 @@
             {% endfor %}
         </tbody>
     </table>
-
-
+    
+    
+    
     <h2 class="info-heading">Processed Files:</h2>
     {% if has_csv == [] %}
     <p><i>No files processed yet.</i></p>
     {% endif %}
-
+    
     <p><ul>
         {% for file in file_info %}
-            {% if file.csv == True %}
-            <li>
-                <span style="color:darkgreen; font-weight: bold">{{ file.name }}</span>
-                &rArr; structured csv produced
-            </li>
-            {% else %}
-            <li><span style="color:rgb(180, 0, 0); font-weight: bold">{{ file.name }}</span>
-                &rArr; structured csv not found
-                </li>
-            {% endif %}
+        {% if file.csv == True %}
+        <li>
+            <span style="color:darkgreen; font-weight: bold">{{ file.name }}</span>
+            &rArr; structured csv produced
+        </li>
+        {% else %}
+        <li><span style="color:rgb(180, 0, 0); font-weight: bold">{{ file.name }}</span>
+            &rArr; structured csv not found
+        </li>
+        {% endif %}
         {% endfor %}
     </ul></p>
+    
+    <script src="{{ url_for('static', filename='js/table_click.js') }}" defer></script>
+
 {% endblock content %}

@@ -11,13 +11,18 @@
                 <option value="syslog">Syslog (Linux)</option>
             </select>
         </div>
-        <input type="file" name="uploaded_log" required>
+
+        <div id="drop-zone" style="border: 2px dashed #888; padding: 20px; text-align: center; margin: 10px 0;">
+            Drag &amp; Drop log file here or click to choose.
+        </div>
+
+        <input type="file" name="uploaded_log" id="uploaded_log" required>
         <div style="text-align: center; margin-top: 10px;">
             <input type="submit" value="Upload">
         </div>
     </form>
-
-
+    
+    <script src="{{ url_for('static', filename='js/drag_and_drop.js') }}" defer></script>
 
     <h2 class="info-heading">Uploaded Files:</h2>
     {% if file_info == [] %}
