@@ -1,0 +1,234 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+
+
+
+
+    <form class="upload-form" action="/table" method="POST">
+        <div>
+            Choose file to be processed:
+            <select name="up_log_file" required>
+                {% for lf in file_info %}
+                <option value="{{ lf.name }}"> {{ lf.name }} </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <input type="submit" name="make-csv" value="Make CSV">
+        </div>
+    </form>
+
+
+
+
+
+
+    <form class="upload-form" action="/table" method="POST">
+        <div>
+            Choose file to be displayed:
+            <select name="csv_file" required>
+                {% for lf in has_csv %}
+                <option value="{{ lf.name }}"> {{ lf.name }} </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <input type="submit" name="show-table" value="Show Table">
+        </div>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+    <form class="upload-form" action="/table" method="POST">
+        <div>
+            Choose table to be downloaded:
+            <select name="csv_for_download" required>
+                {% for lf in has_csv %}
+                <option value="{{ lf.name }}"> {{ lf.name }} </option>
+                {% endfor %}
+            </select>
+        </div>
+
+      
+    <!-- From Date Section -->
+    <div style="margin-top: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+    <h4 style="margin-top: 0;">From Date:</h4>
+    Year:
+    <select name="from_year" id="from_year">
+            <option value="" selected>-- Select Year --</option>
+        {% for i in range(2000, 2026) %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+
+    Month:
+    <select name="from_month" id="from_month">
+        <option value="" selected>-- Select Month --</option>
+        <option value="Jan">January</option>
+        <option value="Feb">February</option>
+        <option value="Mar">March</option>
+        <option value="Apr">April</option>
+        <option value="May">May</option>
+        <option value="Jun">June</option>
+        <option value="Jul">July</option>
+        <option value="Aug">August</option>
+        <option value="Sep">September</option>
+        <option value="Oct">October</option>
+        <option value="Nov">November</option>
+        <option value="Dec">December</option>
+    </select>
+   
+    Date:
+    <select name="from_date" id="from_date">
+        <option value="" selected>-- Select Date --</option>
+        {% for i in range(1, 32) %}
+        <option value="{{ '%02d' % i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+   
+    <div style="margin-top: 10px;">
+        Time (HH:MM:SS):
+            <select name="from_hour" id="from_hour">
+                <option value="" selected>--</option>
+                {% for i in range(24) %}
+                <option value="{{ '%02d' % i }}">{{ '%02d' % i }}</option>
+                {% endfor %}
+            </select>
+            <span>:</span>
+            <select name="from_minute" id="from_minute">
+                <option value="" selected>--</option>
+                {% for i in range(60) %}
+                <option value="{{ '%02d' % i }}">{{ '%02d' % i }}</option>
+                {% endfor %}
+            </select>
+            <span>:</span>
+            <select name="from_second" id="from_second">
+                <option value="" selected>--</option>
+                {% for i in range(60) %}
+                <option value="{{ '%02d' % i }}">{{ '%02d' % i }}</option>
+                {% endfor %}
+            </select>
+    </div>
+</div>
+
+<!-- To Date Section -->
+<div style="margin-top: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+    <h4 style="margin-top: 0;">To Date:</h4>
+    
+    Year:
+    <select name="to_year" id="to_year">
+            <option value="" selected>-- Select Year --</option>
+        {% for i in range(2000, 2026) %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+
+    Month:
+    <select name="to_month" id="to_month">
+        <option value="" selected>-- Select Month --</option>
+        <option value="Jan">January</option>
+        <option value="Feb">February</option>
+        <option value="Mar">March</option>
+        <option value="Apr">April</option>
+        <option value="May">May</option>
+        <option value="Jun">June</option>
+        <option value="Jul">July</option>
+        <option value="Aug">August</option>
+        <option value="Sep">September</option>
+        <option value="Oct">October</option>
+        <option value="Nov">November</option>
+        <option value="Dec">December</option>
+    </select>
+   
+    Date:
+    <select name="to_date" id="to_date">
+        <option value="" selected>-- Select Date --</option>
+        {% for i in range(1, 32) %}
+        <option value="{{ '%02d' % i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+   
+    <div style="margin-top: 10px;">
+        Time (HH:MM:SS):
+            <select name="to_hour" id="to_hour">
+                <option value="" selected>--</option>
+                {% for i in range(24) %}
+                <option value="{{ '%02d' % i }}">{{ '%02d' % i }}</option>
+                {% endfor %}
+            </select>
+            <span>:</span>
+            <select name="to_minute" id="to_minute">
+                <option value="" selected>--</option>
+                {% for i in range(60) %}
+                <option value="{{ '%02d' % i }}">{{ '%02d' % i }}</option>
+                {% endfor %}
+            </select>
+            <span>:</span>
+            <select name="to_second" id="to_second">
+                <option value="" selected>--</option>
+                {% for i in range(60) %}
+                <option value="{{ '%02d' % i }}">{{ '%02d' % i }}</option>
+                {% endfor %}
+            </select>
+    </div>
+</div>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <input type="submit" name="download-table" value="Download">
+        </div>
+    </form>
+
+    <table class="csv-table">
+        <thead>
+            <tr>
+                {% for header in headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    
+    
+    <h2 class="info-heading">Processed Files:</h2>
+    {% if has_csv == [] %}
+    <p><i>No files processed yet.</i></p>
+    {% endif %}
+    
+    <p><ul>
+        {% for file in file_info %}
+        {% if file.csv == True %}
+        <li>
+            <span style="color:darkgreen; font-weight: bold">{{ file.name }}</span>
+            &rArr; structured csv produced
+        </li>
+        {% else %}
+        <li><span style="color:rgb(180, 0, 0); font-weight: bold">{{ file.name }}</span>
+            &rArr; structured csv not found
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul></p>
+    
+    <script src="{{ url_for('static', filename='js/table_click.js') }}" defer></script>
+
+{% endblock content %}

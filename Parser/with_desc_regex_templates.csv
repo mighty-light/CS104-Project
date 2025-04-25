@@ -1,0 +1,166 @@
+E1!\*\*\* register callback for [.a-zA-z]+@[[:alnum:]]+!*** register callback for <*>@<*>
+E2!\*\*\* unregister callback for [.a-zA-z]+@[[:alnum:]]+!*** unregister callback for <*>@<*>
+E3!\*\*\* unregister callback for null!*** unregister callback for null
+E4!\[HSM\] stayAwake false uid: .*, pid: .*!"[HSM] stayAwake false uid: <*>, pid: <*>"
+E5!\[PhoneIntfMgr\] getDataEnabled: subId=.* phoneId=.*![PhoneIntfMgr] getDataEnabled: subId=<*> phoneId=<*>
+E6!\[PhoneIntfMgr\] getDataEnabled: subId=.* retVal=true![PhoneIntfMgr] getDataEnabled: subId=<*> retVal=true
+E7![^ ]+: .* cannot be cast to .*\$Token!<*>: <*> cannot be cast to <*>$Token
+E8![^ ]+: Must execute in UI!<*>: Must execute in UI
+E9!abandonAudioFocus!abandonAudioFocus
+E10!acquire lock=.*, flags=.*, tag=".*", name=.*, ws=.*, uid=.*, pid=.*!"acquire lock=<*>, flags=<*>, tag=""<*>"", name=<*>, ws=<*>, uid=<*>, pid=<*>"
+E11!Acquiring suspend blocker "PowerManagerService\.WakeLocks"\.!"Acquiring suspend blocker ""PowerManagerService.WakeLocks""."
+E12!ACTION_BATTERY_CHANGED AMP: .*; Volt: .*!ACTION_BATTERY_CHANGED AMP: <*>; Volt: <*>
+E13!ACTION_BATTERY_CHANGED pluggedType: .*!ACTION_BATTERY_CHANGED pluggedType: <*>
+E14!ACTIVITY check resid: .*, size=.*!"ACTIVITY check resid: <*>, size=<*>"
+E15!ActivityManagerService,attachApplication,callingPid = .*!"ActivityManagerService,attachApplication,callingPid = <*>"
+E16!ActivityRecord info: ActivityInfo{.* .*}, euid: .*!"ActivityRecord info: ActivityInfo{<*> <*>}, euid: <*>"
+E17!addNotification key=.*\|.*\|.*\|null\|.*!addNotification key=<*>|<*>|<*>|null|<*>
+E18!animateCollapsePanels:flags=.*, force=false, delayed=false, mExpandedVisible=false!"animateCollapsePanels:flags=<*>, force=false, delayed=false, mExpandedVisible=false"
+E19!animateCollapsePanels:flags=.*, force=false, delayed=false, mExpandedVisible=true!"animateCollapsePanels:flags=<*>, force=false, delayed=false, mExpandedVisible=true"
+E20!animateCollapsePanels:flags=.*, force=true, delayed=true, mExpandedVisible=true!"animateCollapsePanels:flags=<*>, force=true, delayed=true, mExpandedVisible=true"
+E21!Animating brightness: target=.*, rate=.*!"Animating brightness: target=<*>, rate=<*>"
+E22!Application requested orientation .*, got rotation .* which has compatible metrics!"Application requested orientation <*>, got rotation <*> which has compatible metrics"
+E23!applyOptionsLocked: Unknown animationType=.*!applyOptionsLocked: Unknown animationType=<*>
+E24!ApStaDisabledState what=.*!ApStaDisabledState what=<*>
+E25!Bad activity token: [.a-zA-z]+@[[:alnum:]]+!Bad activity token: <*>@<*>
+E26!battery changed pluggedType: .*!battery changed pluggedType: <*>
+E27!cancelAutohide!cancelAutohide
+E28!cancelNotification,cancelNotificationLocked,callingUid = .*,callingPid = .*!"cancelNotification,cancelNotificationLocked,callingUid = <*>,callingPid = <*>"
+E29!cancelNotification,index:.*!"cancelNotification,index:<*>"
+E30!cancelNotificationLocked called,tell the app,reason = .*!"cancelNotificationLocked called,tell the app,reason = <*>"
+E31!cancelNotificationLocked,remove =.*!"cancelNotificationLocked,remove =<*>"
+E32!cancelNotificationLocked:.*\|.*\|.*\|null\|.*!cancelNotificationLocked:<*>|<*>|<*>|null|<*>
+E33!cancelNotificationWithTag pid .*,uid = .*,tag = null,pkg =.*,id =.*!"cancelNotificationWithTag pid <*>,uid = <*>,tag = null,pkg =<*>,id =<*>"
+E34!cancelPeek: false!cancelPeek: false
+E35!ChargingSpeed  ?Wattage: .* ST: .* --> .*!ChargingSpeed  Wattage: <*> ST: <*> --> <*>
+E36!cleanUpApplicationRecord -- .*!cleanUpApplicationRecord -- <*>
+E37!cleanUpApplicationRecordLocked, pid: .*, restart: false!"cleanUpApplicationRecordLocked, pid: <*>, restart: false"
+E38!cleanUpApplicationRecordLocked, reset pid: .*, euid: .*!"cleanUpApplicationRecordLocked, reset pid: <*>, euid: <*>"
+E39!closeQs!closeQs
+E40!DefaultState what=.*!DefaultState what=<*>
+E41!Destroying surface Surface\(name=.*\) called by .*!Destroying surface Surface(name=<*>) called by <*>
+E42!disable: < expand icons\* alerts system_info\* back home recent clock navigationbar search quick_settings >!disable: < expand icons* alerts system_info* back home recent clock navigationbar search quick_settings >
+E43!disable: < expand ICONS\* alerts SYSTEM_INFO\* back home recent clock navigationbar search quick_settings >!disable: < expand ICONS* alerts SYSTEM_INFO* back home recent clock navigationbar search quick_settings >
+E44!enqueueNotificationInternal: n\.getKey = .*!enqueueNotificationInternal: n.getKey = <*>
+E45!enqueueNotificationInternal: pkg=.* id=.* notification=Notification\(pri=.* contentView=null vibrate=\[.*\] sound=null tick defaults=.* flags=.* color=.* category=msg vis=PRIVATE\)!enqueueNotificationInternal: pkg=<*> id=<*> notification=Notification(pri=<*> contentView=null vibrate=[<*>] sound=null tick defaults=<*> flags=<*> color=<*> category=msg vis=PRIVATE)
+E46!enqueueNotificationInternal: pkg=.* id=.* notification=Notification\(pri=.* contentView=null vibrate=\[.*\] sound=null tick defaults=.* flags=.* color=.* vis=PRIVATE\)!enqueueNotificationInternal: pkg=<*> id=<*> notification=Notification(pri=<*> contentView=null vibrate=[<*>] sound=null tick defaults=<*> flags=<*> color=<*> vis=PRIVATE)
+E47!flingToHeight: vel=.*\..*, expand=false, target=.*\..*, collapseSpeedUpFactor=.*\..*, expandBecauseOfFalsing=false!"flingToHeight: vel=<*>.<*>, expand=false, target=<*>.<*>, collapseSpeedUpFactor=<*>.<*>, expandBecauseOfFalsing=false"
+E48!flingToHeight: vel=.*\..*, expand=true, target=.*\..*, collapseSpeedUpFactor=.*\..*, expandBecauseOfFalsing=false!"flingToHeight: vel=<*>.<*>, expand=true, target=<*>.<*>, collapseSpeedUpFactor=<*>.<*>, expandBecauseOfFalsing=false"
+E49!getAllCellInfo is blocked by permission manager \. callingPackage = .*!getAllCellInfo is blocked by permission manager . callingPackage = <*>
+E50!getCellLocation is blocked by permission manager uid:.* pid:.*!getCellLocation is blocked by permission manager uid:<*> pid:<*>
+E51!getDevicesForStream  ?streamType: .*!getDevicesForStream  streamType: <*>
+E52!getLastAudibleStreamVolume  ?treamType: .*!getLastAudibleStreamVolume  treamType: <*>
+E53!getMode\.\.\.!getMode...
+E54!getNeighboringCellInfo calling app is .*!getNeighboringCellInfo calling app is <*>
+E55!getRecentTasks: num=.*,flags=.*,totalTasks=.*!"getRecentTasks: num=<*>,flags=<*>,totalTasks=<*>"
+E56!getRecentTasks: topActivity=ComponentInfo{.*.*\..*}!getRecentTasks: topActivity=ComponentInfo{<*><*>.<*>}
+E57!getRingerMode\.\.\.!getRingerMode...
+E58!getRingtonePlayer\.\.\.!getRingtonePlayer...
+E59!getRunningAppProcesses: caller .* does not hold REAL_GET_TASKS; limiting output!getRunningAppProcesses: caller <*> does not hold REAL_GET_TASKS; limiting output
+E60!getStreamVolume  ?treamType: .*!getStreamVolume  treamType: <*>
+E61!getTasks: caller .* does not hold REAL_GET_TASKS; limiting output!getTasks: caller <*> does not hold REAL_GET_TASKS; limiting output
+E62!handleBatteryUpdate!handleBatteryUpdate
+E63!handleTimeUpdate!handleTimeUpdate
+E64!HBM brightnessIn =.*!HBM brightnessIn =<*>
+E65!HBM brightnessOut =.*!HBM brightnessOut =<*>
+E66!instantCollapse!instantCollapse
+E67!interceptKeyBeforeQueueing: key .* , result : .*!"interceptKeyBeforeQueueing: key <*> , result : <*>"
+E68!interceptKeyTq keycode=.* interactive=true keyguardActive=false policyFlags=.* down false canceled false!interceptKeyTq keycode=<*> interactive=true keyguardActive=false policyFlags=<*> down false canceled false
+E69!interceptKeyTq keycode=.* interactive=true keyguardActive=false policyFlags=.* down true canceled false!interceptKeyTq keycode=<*> interactive=true keyguardActive=false policyFlags=<*> down true canceled false
+E70!isBluetoothA2dpOn\.\.\.!isBluetoothA2dpOn...
+E71!isBluetoothScoOn\.\.\.!isBluetoothScoOn...
+E72!isMusicActive\.\.\.!isMusicActive...
+E73!isSimPinSecure mSimDatas is null or empty!isSimPinSecure mSimDatas is null or empty
+E74!isWiredHeadsetOn\.\.\.!isWiredHeadsetOn...
+E75!Killing .*:.*.* \(adj .*\): empty for .*!Killing <*>:<*><*> (adj <*>): empty for <*>
+E76!logNotificationVisibilityChanges runInThread over!logNotificationVisibilityChanges runInThread over
+E77!logNotificationVisibilityChanges runInThread start!logNotificationVisibilityChanges runInThread start
+E78!makeExpandedInvisible: mExpandedVisible=false!makeExpandedInvisible: mExpandedVisible=false
+E79!makeExpandedInvisible: mExpandedVisible=true!makeExpandedInvisible: mExpandedVisible=true
+E80!Marking notification as seen .*\|.*\|.*\|null\|.*!Marking notification as seen <*>|<*>|<*>|null|<*>
+E81!mHeadsUpExistenceChangedRunnable!mHeadsUpExistenceChangedRunnable
+E82!mVisiblity\.getValue is false!mVisiblity.getValue is false
+E83!new Process app=ProcessRecord{.* .*:.*:qzone.*}, name: .*:qzone, euid: .*!"new Process app=ProcessRecord{<*> <*>:<*>:qzone<*>}, name: <*>:qzone, euid: <*>"
+E84!notifyUiVisibilityChanged:vis=.*, SystemUiVisibility=.*!"notifyUiVisibilityChanged:vis=<*>, SystemUiVisibility=<*>"
+E85!onExpandingFinished!onExpandingFinished
+E86!onExpandingStarted!onExpandingStarted
+E87!onInterceptTouchEvent MotionEvent { action=ACTION_DOWN, actionButton=.*, id\[.*\]=.*, x\[.*\]=.*\..*, y\[.*\]=.*\..*, toolType\[.*\]=TOOL_TYPE_FINGER, buttonState=.*, metaState=.*, flags=.*, edgeFlags=.*, pointerCount=.*, historySize=.*, eventTime=.*, downTime=.*, deviceId=.*, source=.* }, mBlockTouches=false!"onInterceptTouchEvent MotionEvent { action=ACTION_DOWN, actionButton=<*>, id[<*>]=<*>, x[<*>]=<*>.<*>, y[<*>]=<*>.<*>, toolType[<*>]=TOOL_TYPE_FINGER, buttonState=<*>, metaState=<*>, flags=<*>, edgeFlags=<*>, pointerCount=<*>, historySize=<*>, eventTime=<*>, downTime=<*>, deviceId=<*>, source=<*> }, mBlockTouches=false"
+E88!onInterceptTouchEvent MotionEvent { action=ACTION_UP, actionButton=.*, id\[.*\]=.*, x\[.*\]=.*\..*, y\[.*\]=.*\..*, toolType\[.*\]=TOOL_TYPE_FINGER, buttonState=.*, metaState=.*, flags=.*, edgeFlags=.*, pointerCount=.*, historySize=.*, eventTime=.*, downTime=.*, deviceId=.*, source=.* }, mBlockTouches=false!"onInterceptTouchEvent MotionEvent { action=ACTION_UP, actionButton=<*>, id[<*>]=<*>, x[<*>]=<*>.<*>, y[<*>]=<*>.<*>, toolType[<*>]=TOOL_TYPE_FINGER, buttonState=<*>, metaState=<*>, flags=<*>, edgeFlags=<*>, pointerCount=<*>, historySize=<*>, eventTime=<*>, downTime=<*>, deviceId=<*>, source=<*> }, mBlockTouches=false"
+E89!onNotificationClick called!onNotificationClick called
+E90!onNotificationExpansionChanged called!onNotificationExpansionChanged called
+E91!onNotificationVisibilityChanged called!onNotificationVisibilityChanged called
+E92!onReceive, action:.*!"onReceive, action:<*>"
+E93!onTouchEvent::.*, x=.*\..*, y=.*\..*!"onTouchEvent::<*>, x=<*>.<*>, y=<*>.<*>"
+E94!onTrackingStarted!onTrackingStarted
+E95!onTrackingStopped: true!onTrackingStopped: true
+E96!orientation change is complete, call stopFreezingDisplayLocked!"orientation change is complete, call stopFreezingDisplayLocked"
+E97!overlapAmount:.*\..*, previousNotificationEnd:.*\..*, newYTranslation:.*\..*, location:.*, i:.*, getTopPadding:.*\..*, getLocationOnScreen\(\):.*!"overlapAmount:<*>.<*>, previousNotificationEnd:<*>.<*>, newYTranslation:<*>.<*>, location:<*>, i:<*>, getTopPadding:<*>.<*>, getLocationOnScreen():<*>"
+E98!Pid:.* MediaPlayer destructor!Pid:<*> MediaPlayer destructor
+E99!playSoundEffect +effectType: .*!playSoundEffect   effectType: <*>
+E100!printFreezingDisplayLogsopening app wtoken = AppWindowToken\{.* token=Token\{.* ActivityRecord\{.* u0 .*/\..* t761\}\}\}, .*!"printFreezingDisplayLogsopening app wtoken = AppWindowToken{<*> token=Token{<*> ActivityRecord{<*> u0 <*>/.<*> t761}}}, allDrawn= false, startingDisplayed =  false, startingMoved =  false, isRelaunching =  false"
+E101!Process .*:qzone \(pid .*\) has died!Process <*>:qzone (pid <*>) has died
+E102!querySoundEffectsEnabled\.\.\.!querySoundEffectsEnabled...
+E103!ready=true,policy=.*,wakefulness=.*,wksummary=.*,uasummary=.*,bootcompleted=true,boostinprogress=false,waitmodeenable=false,mode=false,manual=.*,auto=.*,adj=.*\.0userId=.*!"ready=true,policy=<*>,wakefulness=<*>,wksummary=<*>,uasummary=<*>,bootcompleted=true,boostinprogress=false,waitmodeenable=false,mode=false,manual=<*>,auto=<*>,adj=<*>.0userId=<*>"
+E104!received broadcast .*!received broadcast <*>
+E105!Received TIME_TICK alarm; rescheduling!Received TIME_TICK alarm; rescheduling
+E106!RefreshBatteryInfo isBatteryLow: .*!RefreshBatteryInfo isBatteryLow: <*>
+E107!registerCallback not in UI\.!registerCallback not in UI.
+E108!release:lock=.*, flg=.*, tag=".*", name=.*, ws=.*, uid=.*, pid=.*!"release:lock=<*>, flg=<*>, tag=""<*>"", name=<*>, ws=<*>, uid=<*>, pid=<*>"
+E109!Releasing suspend blocker "PowerManagerService\.WakeLocks"\.!"Releasing suspend blocker ""PowerManagerService.WakeLocks""."
+E110!remove\(PendingIntent{.*: PendingIntentRecord{.* .* broadcastIntent}}\) changed bounds; rebatching!remove(PendingIntent{<*>: PendingIntentRecord{<*> <*> broadcastIntent}}) changed bounds; rebatching
+E111!removeNotification:.*\|.*\|.*\|null\|.*!removeNotification:<*>|<*>|<*>|null|<*>
+E112!removeNotificationChildren!removeNotificationChildren
+E113!resumeSuspendedAutohide!resumeSuspendedAutohide
+E114!rotationForOrientationLw\(orient=.*, last=.*\); user=.* USER_ROTATION_LOCKED!"rotationForOrientationLw(orient=<*>, last=<*>); user=<*> USER_ROTATION_LOCKED"
+E115!schedulePeek!schedulePeek
+E116!scheduleTimeTickEvent triggerAtTime = .*!scheduleTimeTickEvent triggerAtTime = <*>
+E117!Scheduling restart of crashed service .*\..* in .*!Scheduling restart of crashed service <*>.<*> in <*>
+E118!Screen frozen for .* due to Window{.* u0 .*\..*}!Screen frozen for <*> due to Window{<*> u0 <*>.<*>}
+E119!sending alarm Alarm{.* type .* when .* PendingIntent{.*: PendingIntentRecord{.* .* broadcastIntent}}},repeatInterval = .*,listenerTag =null!"sending alarm Alarm{<*> type <*> when <*> PendingIntent{<*>: PendingIntentRecord{<*> <*> broadcastIntent}}},repeatInterval = <*>,listenerTag =null"
+E120!sending alarm Alarm{.* type .* when .* PendingIntent{.*: PendingIntentRecord{.* android broadcastIntent}}},repeatInterval = .*,listenerTag =time_tick!"sending alarm Alarm{<*> type <*> when <*> PendingIntent{<*>: PendingIntentRecord{<*> android broadcastIntent}}},repeatInterval = <*>,listenerTag =time_tick"
+E121!Sending non-protected broadcast .* from system .*:.* pkg .*!Sending non-protected broadcast <*> from system <*>:<*> pkg <*>
+E122!setDataSource\(.*, .*, .*\)!"setDataSource(<*>, <*>, <*>)"
+E123!setLightsOn\(true\)!setLightsOn(true)
+E124!setSpeakerphoneOn  ?on: true!setSpeakerphoneOn  on: true
+E125!setSpeakerphoneOn on:true!setSpeakerphoneOn on:true
+E126!setSystemUiVisibility vis=.* mask=.* oldVal=.* newVal=.* diff=.* fullscreenStackVis=.* dockedStackVis=.*, fullscreenStackBounds=Rect\(.*, .* - .*, .*\), dockedStackBounds=Rect\(.*, .* - .*, .*\)!"setSystemUiVisibility vis=<*> mask=<*> oldVal=<*> newVal=<*> diff=<*> fullscreenStackVis=<*> dockedStackVis=<*>, fullscreenStackBounds=Rect(<*>, <*> - <*>, <*>), dockedStackBounds=Rect(<*>, <*> - <*>, <*>)"
+E127!setWiredDeviceConnectionState +type: .*  ?state: .*!setWiredDeviceConnectionState  type: <*>  state: <*>
+E128!shouldBlockLocation  ?ret:false!shouldBlockLocation  ret:false
+E129!shouldBlockLocation  ?ret:true!shouldBlockLocation  ret:true
+E130!shouldBlockLocation running \.\.\.!shouldBlockLocation running ...
+E131!Skipping AppWindowToken{.* token=Token{.* ActivityRecord{.* u0 .*}}} -- going to hide!Skipping AppWindowToken{<*> token=Token{<*> ActivityRecord{<*> u0 <*>}}} -- going to hide
+E132!Skipping, withExcluded: false, tr\.intent:Intent { act=.* dat=[^ ]+ flg=.* cmp=.* \(has extras\) }!"Skipping, withExcluded: false, tr.intent:Intent { act=<*> dat=<*> flg=<*> cmp=<*> (has extras) }"
+E133!Skipping, withExcluded: false, tr\.intent:Intent { act=.* dat=.* typ=.* flg=.* cmp=.* \(has extras\) }!"Skipping, withExcluded: false, tr.intent:Intent { act=<*> dat=<*> typ=<*> flg=<*> cmp=<*> (has extras) }"
+E134!Skipping, withExcluded: false, tr\.intent:Intent { act=.* flg=.* cmp=.* \(has extras\) }!"Skipping, withExcluded: false, tr.intent:Intent { act=<*> flg=<*> cmp=<*> (has extras) }"
+E135!Skipping, withExcluded: false, tr\.intent:Intent { flg=.* cmp=.* \(has extras\) }!"Skipping, withExcluded: false, tr.intent:Intent { flg=<*> cmp=<*> (has extras) }"
+E136!Skipping, withExcluded: false, tr\.intent:Intent { flg=.* cmp=.* bnds=.* }!"Skipping, withExcluded: false, tr.intent:Intent { flg=<*> cmp=<*> bnds=<*> }"
+E137!Start dump, calling from : pid=.*, uid=.*!"Start dump, calling from : pid=<*>, uid=<*>"
+E138!Start proc .*:.*:qzone.* for service .*\..*!Start proc <*>:<*>:qzone<*> for service <*>.<*>
+E139!START u0 {act=.* cat=\[.*\] flg=.* cmp=.* bnds=.*} from uid .* on display .*!START u0 {act=<*> cat=[<*>] flg=<*> cmp=<*> bnds=<*>} from uid <*> on display <*>
+E140!START u0 {act=.* flg=.* cmp=.* \(has extras\)} from uid .* on display .*!START u0 {act=<*> flg=<*> cmp=<*> (has extras)} from uid <*> on display <*>
+E141!START u0 {flg=.* cmp=.* \(has extras\)} from uid .* on display .*!START u0 {flg=<*> cmp=<*> (has extras)} from uid <*> on display <*>
+E142!startActivity called from non-Activity context; forcing Intent\.FLAG_ACTIVITY_NEW_TASK for: Intent { flg=.* cmp=.* \(has extras\) }!startActivity called from non-Activity context; forcing Intent.FLAG_ACTIVITY_NEW_TASK for: Intent { flg=<*> cmp=<*> (has extras) }
+E143!startAnimation begin!startAnimation begin
+E144!startAnimation end!startAnimation end
+E145!state\.clipTopAmount:.*, i:.*!"state.clipTopAmount:<*>, i:<*>"
+E146!stopWifiDisplayScanLocked mWifiDisplayScanRequestCount=.*!stopWifiDisplayScanLocked mWifiDisplayScanRequestCount=<*>
+E147!stopWifiDisplayScanLocked record\.mWifiDisplayScanRequested=false!stopWifiDisplayScanLocked record.mWifiDisplayScanRequested=false
+E148!suspendAutohide!suspendAutohide
+E149!Taking screenshot from Surface with crop:\[Rect\(.*, .* - .*, .*\)\], width:\[.*\], height:\[.*\], minLayer:\[.*\], maxLayer:\[.*\], inRotation:\[false\], rot:\[.*\]!"Taking screenshot from Surface with crop:[Rect(<*>, <*> - <*>, <*>)], width:[<*>], height:[<*>], minLayer:[<*>], maxLayer:[<*>], inRotation:[false], rot:[<*>]"
+E150!The change in focus caused us to need to do a layout begin!The change in focus caused us to need to do a layout begin
+E151!The change in focus caused us to need to do a layout end!The change in focus caused us to need to do a layout end
+E152!Unable to start service Intent { act=.* cmp=.*\..* } U=.*: not found!Unable to start service Intent { act=<*> cmp=<*>.<*> } U=<*>: not found
+E153!unregisterAudioFocusListener\.\.\.!unregisterAudioFocusListener...
+E154!updateChargingLocked: charging=false!updateChargingLocked: charging=false
+E155!updateClipping isOverlap:false, getTopPadding=.*\..*, Translation=.*\..*!"updateClipping isOverlap:false, getTopPadding=<*>.<*>, Translation=<*>.<*>"
+E156!updateClipping isOverlap:true, getTopPadding=.*\..*, Translation=.*\..*!"updateClipping isOverlap:true, getTopPadding=<*>.<*>, Translation=<*>.<*>"
+E157!updateDimmedActivatedHideSensitive overlap:false!updateDimmedActivatedHideSensitive overlap:false
+E158!updateDimmedActivatedHideSensitive overlap:true!updateDimmedActivatedHideSensitive overlap:true
+E159!updateIsPoweredLocked: wasPowered=false, mIsPowered=false, oldPlugType=.*, mPlugType=.*, mBatteryLevel=.*!"updateIsPoweredLocked: wasPowered=false, mIsPowered=false, oldPlugType=<*>, mPlugType=<*>, mBatteryLevel=<*>"
+E160!updateLightsLocked,mInCall =false,mScreenOn = true,ledNotification == null\?false!"updateLightsLocked,mInCall =false,mScreenOn = true,ledNotification == null?false"
+E161!updateLightsLocked,mInCall =false,mScreenOn = true,ledNotification == null\?true!"updateLightsLocked,mInCall =false,mScreenOn = true,ledNotification == null?true"
+E162!updateLightsLocked,turn off notificationLight!"updateLightsLocked,turn off notificationLight"
+E163!updateNotificationShade: total=.*, active=.*!"updateNotificationShade: total=<*>, active=<*>"
+E164!userActivityNoUpdateLocked: eventTime=.*, event=.*, flags=.*, uid=.*!"userActivityNoUpdateLocked: eventTime=<*>, event=<*>, flags=<*>, uid=<*>"
+E165!visible is [^ ]+!visible is <*>
+E166!visible is .* gt .*!visible is <*> gt <*>

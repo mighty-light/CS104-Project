@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <form class="upload-form" enctype="multipart/form-data" action="/upload" method="POST">
+        <div>
+            <label for="log_type">Choose type of log file:</label>
+            <select name="log_type" id="log_type" required>
+                <option value="auto">Auto Detect</option>
+                <option value="apache">Apache</option>
+                <option value="android">Android</option>
+                <option value="syslog">Syslog (Linux)</option>
+            </select>
+        </div>
+
+        <div id="drop-zone" style="border: 2px dashed #888; padding: 20px; text-align: center; margin: 10px 0;">
+            Drag &amp; Drop log file here or click to choose.
+        </div>
+
+        <input type="file" name="uploaded_log" id="uploaded_log" required>
+        <div style="text-align: center; margin-top: 10px;">
+            <input type="submit" value="Upload">
+        </div>
+    </form>
+    
+    <script src="{{ url_for('static', filename='js/drag_and_drop.js') }}" defer></script>
+
+    <h2 class="info-heading">Uploaded Files:</h2>
+    {% if file_info == [] %}
+    <p><i>No files uploaded yet.</i></p>
+    {% endif %}
+
+    <p><ul>
+        {% for file in file_info %}
+            {% if file.valid == True %}
+            <li>
+                <span style="color:darkgreen; font-weight: bold">{{ file.name }}</span>
+                &rArr; {{ file.type }} log file | Uploaded on {{ file.time }}
+            </li>
+            {% else %}
+            <li><span style="color:rgb(180, 0, 0); font-weight: bold">{{ file.name }}</span>
+                &rArr; Invalid log file | Uploaded on {{ file.time }}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul></p>
+{% endblock content %}
