@@ -6,6 +6,8 @@ from flask import Flask, render_template
 from flask import request, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 
+import matplotlib
+matplotlib.use('Agg') # set Agg backend to avoid GUI issues
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -176,7 +178,6 @@ def make_structured_csv(file_data):
     )    
     file_data['csv'] = True
 
-# Maybe add a hide table option?
 def display_table(file_data):
     csv_path = get_csv_path_from_data(file_data)
 
@@ -211,7 +212,6 @@ def download_filtered_table(file_data):
 ### NOTE: Much of the hard coding (if else) can be removed if we use the
 ### mktime() function of awk that will calculate the time from epoch.
 ### It will also work with weird date-time choices, e.g., daylight savings.
-### TODO: Add option to sort by some other column? [OPTIONAL]
 
 ################################################################
 ##################### PLOT DISPLAY #############################
@@ -255,6 +255,8 @@ def create_plots(filepath, extension='jpeg', kind=None):
     plt.style.use('fivethirtyeight')
     plt.tight_layout()
     plt.savefig(plot_path)
+    plt.close()
+
     return get_image_name(filepath, extension)
 
 def draw_apache_plot(filepath, title_font=None):
@@ -382,7 +384,6 @@ def convert_to_datetime(string, kind=None):
 
 #################################################################
 ######## MAYBE ADD CUSTOM INPUT FOR CREATING PLOTS ##############
-######## DRAG AND DROP FUNCTIONALITY               ##############
 #################################################################
 
 if __name__ == "__main__":
