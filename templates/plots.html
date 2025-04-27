@@ -144,6 +144,14 @@
     </div>
     </form>
 
+    {% if plot_name != None %}
+    <div id="plot_wrapper">
+        <img src="{{ url_for('img', filename=plot_name) }}" alt="Plot" id="plot_image">
+        <div id="download_overlay">Download</div>
+    </div>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='js/start_plot_download.js') }}" defer></script>
 
 
 

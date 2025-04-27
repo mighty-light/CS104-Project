@@ -132,3 +132,39 @@ tbody tr:hover {
     background-color: #f1fff8;
     cursor: pointer;
 }
+
+#plot_image {
+    display: block; 
+    width: 100%;
+    margin-left: auto; 
+    margin-right: auto;
+    transition: 0.3s ease;
+}
+
+#plot_image:hover {
+    filter: brightness(50%);
+}
+
+#plot_wrapper:hover #download_overlay{
+    opacity: 1;
+}
+
+#plot_wrapper {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    position: relative;
+    cursor: pointer;
+}
+
+#download_overlay {
+    font-family: 'Pacifico', sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(224, 255, 100);
+    opacity: 0;
+    transition: 0.3s ease;
+}

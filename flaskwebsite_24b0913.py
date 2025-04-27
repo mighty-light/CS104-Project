@@ -3,7 +3,7 @@ import os, csv, subprocess
 import matplotlib.pyplot as plt
 from datetime import datetime
 from flask import Flask, render_template
-from flask import request, send_file
+from flask import request, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 
 
@@ -24,6 +24,9 @@ SUPPORTED_LOG_FORMATS = ['apache', 'android', 'syslog']
 
 def get_image_path(filepath, extension):
     return os.path.join(IMAGE_FOLDER, f"plot_{os.path.basename(filepath)}.{extension}")
+
+def get_image_name(filepath, extension):
+    return f"plot_{os.path.basename(filepath)}.{extension}"
 
 def get_file_data(html_name):
     return [file_data for file_data in uploaded_files if file_data['name'] == request.form.get(html_name)][0]
@@ -214,10 +217,14 @@ def download_filtered_table(file_data):
 ##################### PLOT DISPLAY #############################
 ################################################################
 
+@app.route('/img/<path:filename>')
+def img(filename):
+    return send_from_directory('img', filename)
 
 
 @app.route("/plots", methods=[ 'GET', 'POST' ])
 def plots():
+    plot_name = None
     if 'plot-table' in request.form:
             start_date = find_start_date()
             end_date = find_end_date()
@@ -227,13 +234,14 @@ def plots():
 
             filepath = get_csv_path_from_data(file_data, filtered=True)
             file_ext = request.form.get('plt-extension')
-            return create_plots(filepath, file_ext, kind=file_data['type'])
+            plot_name = create_plots(filepath, file_ext, kind=file_data['type'])
 
-    return render_template("plots.html", title="Generate Plots", has_csv = [file for file in uploaded_files if file['csv']])
+    return render_template("plots.html", title="Generate Plots", plot_name=plot_name,
+                           has_csv = [file for file in uploaded_files if file['csv']])
 
 def create_plots(filepath, extension='jpeg', kind=None):
     
-    plot_path = get_image_path(filepath, extension)             
+    plot_path = get_image_path(filepath, extension).replace('\\', '/')             
     title_font = {'family': 'serif', 'color': 'darkblue', 'weight': 'bold', 'size': 16,}
 
     if kind == 'apache':
@@ -247,8 +255,7 @@ def create_plots(filepath, extension='jpeg', kind=None):
     plt.style.use('fivethirtyeight')
     plt.tight_layout()
     plt.savefig(plot_path)
-    plt.show() # Remove in final version
-    return send_file(plot_path, as_attachment=True)
+    return get_image_name(filepath, extension)
 
 def draw_apache_plot(filepath, title_font=None):
     level_state = { 'notice' : 0, 'error' : 0 }
@@ -360,11 +367,7 @@ def convert_to_datetime(string, kind=None):
     date = string.split()
     month = month_to_str[date[magic_bit]]
     
-    if len(date[1+magic_bit]) == 1:
-        day = "0" + date[1+magic_bit]
-    else:
-        day = date[1+magic_bit]
-    
+    day = date[1+magic_bit].zfill(2)
     hrs, mnt, sec = date[2+magic_bit].split(":")
     # Unnecessary in this implementation but
     # was useful in the earlier versions using datetime
