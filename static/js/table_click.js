@@ -21,13 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const aVal = getCellValue(a, colIdx);
                 const bVal = getCellValue(b, colIdx);
 
+                // try to do numeric sort if possible 2 < 100
                 const aNum = parseFloat(aVal.replace(/,/g, ""));
                 const bNum = parseFloat(bVal.replace(/,/g, ""));
                 
                 if (!isNaN(aNum) && !isNaN(bNum)) {
                     return aNum - bNum;
                 }
-
+                
+                // parse numbers so that E2 < E100
                 const alphaNumRe = /^([A-Za-z]+)(\d+)$/;
                 const aMatch = aVal.match(alphaNumRe);
                 const bMatch = bVal.match(alphaNumRe);
@@ -35,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (aMatch && bMatch && aMatch[1] === bMatch[1]) {
                     return parseInt(aMatch[2], 10) - parseInt(bMatch[2], 10);
                 }
-
+                
+                // resort to alphabetic ordering
                 return aVal.localeCompare(bVal);
             });
   
@@ -59,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const colIdx     = cell.cellIndex;
           const clickedVal = cell.textContent.trim();
       
-          // If user clicked the same cell‐value again, clear filter
+          // if user clicked the same cell‐value again, clear filter
           if (colIdx === lastColIdx && clickedVal === lastVal) {
             rows.forEach(r => r.style.display = "");
             lastColIdx = null;
@@ -67,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
           }
       
-          // Otherwise apply new filter
+          // otherwise apply new filter
           rows.forEach(r => {
             const rCell = r.children[colIdx];
             const val = rCell ? rCell.textContent.trim() : null;
