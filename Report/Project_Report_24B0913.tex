@@ -71,7 +71,7 @@ To get started with log analysis, proceed to the upload page and upload your log
 file using drag and drop interface (or a dialog box by clicking). All processing
 is done \emph{lazily} except validation that is done instantly after the file is
 received (see \nameref{philo}). Practically, this means that you can upload
-multiple files at once but you have to \emph{tell} the website which one do you
+multiple files one by one but you have to \emph{tell} the website which one do you
 want to process first.
 
 
@@ -150,9 +150,12 @@ want to process first.
   features of HTML/CSS/JS themselves rather than relying on ``magic'' done by
   somebody else.
 
-  \item \textbf{Consistent Interface:} All constituent webpages should have the
-    share as much HTML/CSS as possible and the functioning of the website should
-    be clear and easy for the user to remember and use.
+  \item \textbf{Consistent Interface:} All constituent webpages share as much
+    HTML/CSS as possible; I have tried to make the functioning of the website
+    clear and easy to remember and use (since bash scripts are the slowest part
+    of the server-side, if the user explicitly clicks the buttons starting the
+    bash scripts, then they will have some idea as to why it is taking time to
+    load).
 \end{enumerate}
 
 \subsection{The Webpages}
@@ -160,15 +163,21 @@ want to process first.
 The website consists of four webpages, namely,
 
 \begin{enumerate}
-  \item \textbf{Main Page:} Gives a short introduction to the webiste and a mini
-    usage guide.
+  \item \textbf{Main Page:} Gives a short introduction to the website and a mini
+    usage guide. I felt that the first page being an uploads page might feel out
+    of context. It is possible to compress the pages together but as per project
+    guidelines \cite{logfileprob}, we needed at least three webpages.
   \item \textbf{Upload Files:} Allows the user to upload files. Currently
-    supported formats are shown in the drop down menu and by default it auto
-    detects.
-  \item \textbf{Show Tables:} Makes structured csv and displays tables; also
-    allows the download of csvs filtered by from and to dates.
-  \item \textbf{Show Plots:} Produces plots from the data in structured csv
-    files over custom data ranges using python.
+    supported formats are shown in the drop down menu (Apache log files,
+    Android log files and Linux Syslog). By default, it auto
+    detects the log type and informs the user of any failure.
+  \item \textbf{Show Tables:} Makes structured csv and displays interactive
+    tables; also allows the download of csvs filtered by \texttt{from} and
+    \texttt{to} dates.
+  \item \textbf{Show Plots:} Plots the data in structured csv
+    files over custom date ranges. The image can be downloaded in both
+    \texttt{png} and \texttt{jpeg} formats by clicking on the displayed plot on
+    the website (by default no download is started).
 \end{enumerate}
 
 \subsection{Implemented Features}
@@ -279,8 +288,8 @@ short summary.
 
 \subsection{Directory Structure}
 The project uses three different tools: \texttt{bash}, \texttt{python}, and web
-development tools. Finally, we have this report in \LaTeX. Now the folders that
-correspond of each of these things are as follows:
+development tools. We also have this {\LaTeX} report. The folders that
+correspond to each of these things are as follows:
 
 \begin{enumerate}
   \item \textbf{Bash:} The \texttt{Validator} directory contains bash scripts
@@ -293,7 +302,7 @@ correspond of each of these things are as follows:
     \texttt{flaskwebsite\_24b0913.py} lies at the root of the project. All other
     python files lie inside the \texttt{app} folder.
 
-  \item \textbf{Web Tools:} First of all, all the HTML pages, written using
+  \item \textbf{Web Tools:} All the HTML pages written using
     \texttt{Jinja2} templating engine lie in the \texttt{templates} directory.
     Javascript files are in \texttt{static/js} while all the CSS lies in the
     file \texttt{static/style.css}.
@@ -336,7 +345,7 @@ Now we shall see what all files each of these folders contain.
     \texttt{table\_click.js} handles the click events in the displayed table
     that allow for dynamic sorting and filtering using Javascript.
   \item \texttt{templates:} The \texttt{layout.html} file is the backbone of the
-    website design and contains all the dreaded HTML boilerplate . Each
+    website design and contains all the dreaded HTML boilerplate. Each
     webpage also has its own file.
   \item \texttt{app:} This folder contains the following files:
     \begin{itemize}
@@ -381,8 +390,8 @@ The builtin \texttt{awk} functions had to be used extensively and this activity
 gave me an exposure of how to use them. 
 
 One of the hardest thing was to
-debugging the regex that I have written given the event templates. The way the
-regex engine for \texttt{awk} functions is different for varibles and raw
+debugging the regexes that I had written using event templates. The way the
+\texttt{awk} regex engine parses is different for variables and raw
 strings so I was there in escaping and quotation hell. 
 
 Earlier I learnt to debug by using the excel skills that we had learnt in class
@@ -436,17 +445,17 @@ functions were put in \texttt{*utils.py}. Before the refactoring I thought that
 I knew how the applciation worked. I did not. The errors during refactoring
 taught me how the application worked (first I searched online sources and asked
 ChatGPT that why the \texttt{Jinja2} templating engine was unable to detect my
-HTML templates when they were present in the default directory and it was fine
+HTML templates when they were present in the default directory and that it was fine
 before I had tried refactoring).
 
 Essentially, the idea is that the \texttt{Flask(\_\_name\_\_)} that produces the
 current app instance should be present at the root of the project (made
-in \texttt{flaskwebsite\_24b0913.py} for me). Then import you may import your
+in \texttt{flaskwebsite\_24b0913.py} for me). Then you may import your
 routes from whichever files you have in \texttt{app/}. However, these have to
 import the app instance from \emph{the file that produced the app instance} and
 \emph{not} \texttt{flask}.
 
-As a a side not, I also got to know that \texttt{Jinja2} is used in contexts outside of
+As a side not, I also got to know that \texttt{Jinja2} is used in contexts outside of
 Flask and developing websites -- for templating network device configurations
 and database replication.
 
@@ -483,27 +492,29 @@ completely else.
   \item \texttt{start\_plot\_download.js:} You first find the plot image on the
     webpage using \texttt{querySelector} and create a link element. The target
     of this link was set using \texttt{link.href = plot.src}. Finally to detect
-    clicks, you add an event listener which a weird thing: it creates the
+    clicks, you add an event listener which does a weird thing: it creates the
     hypothetical object as a part of the document, \emph{clicks} it, and
     \emph{then deletes} it (the flashy effects are done using CSS and have
-    nothing to do with Javascript at all \dots not quite click $=$ download)!
+    nothing to do with Javascript at all \dots not quite click to
+    download\footnote{it \emph{is} click to download but the semantics is
+    different})!
   \item \texttt{drag\_and\_drop.js:} You make a \texttt{div} that constitutes
     the drag-and-drop zone. Then you add an event handler that checks whether
     the user has dragged a file into that zone (and highlight it using CSS).
     Apparently there is a \texttt{dataTransfer.files} attribute that event
     objects have that allows them to ``catch the file to be sent to the
-    server''. To be more precise, it is a \texttt{FileList}, which is like an
+    server''. More precisely, it is a \texttt{FileList}, which is like an
     array of files that were dropped. Input fields of type \texttt{file} have a
-    property \texttt{files} that allows them to keep track of which files where
+    \texttt{files} attribute that allows them to keep track of which files where
     uploaded (these are updated as necesssary).
   \item \texttt{table\_click.js:} This was a bit hard to do. I tried to write an
     implementation which failed without giving errors (even in the browser
     console) so I had to take substantial amount of help from the internet.
     There are two event listeners: one listening for clicks on headings of the
     table and the other listening to clicks on the data cells. They make use of
-    some special attributes of objects that I did not know. Conceptually, I
-    check the value of the cell nearest to user click and act appropriately
-    depeonding on the internal state.
+    some special attributes of objects that I did not know. Conceptually, it
+    checks the value of the cell nearest to user click and acts appropriately
+    depending on the internal state.
 
 \end{itemize}
 
