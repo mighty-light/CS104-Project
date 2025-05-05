@@ -1,0 +1,29 @@
+\begin{thebibliography}{{The}24}
+
+\bibitem[Fre19]{learnflaskfreecodecamp}
+FreeCodeCamp.
+\newblock Learn flask for python, 2019.
+\newblock Accessed: 2025-04-28.
+
+\bibitem[Gup25]{logfileprob}
+Kritin Gupta.
+\newblock Log file analysis, 2025.
+\newblock Official problem statement.
+
+\bibitem[Pro24]{flaskdocs}
+Pallets Projects.
+\newblock Flask documentation (stable), 2024.
+\newblock Accessed: 2025-04-27.
+
+\bibitem[Sch18]{flasktutorial}
+Corey Schafer.
+\newblock Flask tutorials, 2018.
+\newblock Accessed: 2025-04-28.
+
+\bibitem[{The}24]{gawk-builtin-functions}
+{The GNU Project}.
+\newblock {\em GNU Awk User's Guide: Built-in Functions}.
+\newblock Free Software Foundation, 2024.
+\newblock Accessed: 2025-04-28.
+
+\end{thebibliography}

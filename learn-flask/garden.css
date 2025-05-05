@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=CMU+Serif&family=CMU+Sans');
+
+
+
+body {
+    background-color: #eeeeee;
+    counter-reset: section;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+}
+
+h1 {
+    counter-reset: subsection;
+}
+
+h3::before {
+    counter-increment: section;
+    content: "§"counter(section) ". ";
+}
+
+h4::before {
+    counter-increment: subsection;
+    content: "§"counter(section) "." counter(subsection) " ";
+}
+
+.main-heading {
+    font-family: 'CMU Sans', sans-serif;
+    text-align: center;
+    color: navy;
+    background-color: #dddddd;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.section {
+    font-family: 'CMU Sans', sans-serif;
+    color: rgb(220, 73, 5);
+}
+
+.subsection {
+    font-family: 'CMU Sans', sans-serif;
+    color: brown;
+}
+
+.normal-para {
+    font-family: 'CMU Serif', serif;
+    text-align: justify;
+}
+
+.toc {
+    font-family: 'CMU Sans', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.toc ol {
+    list-style: none;
+    padding-left: 0;
+}
+
+
+.toc ol ol {
+    padding-left: 20px; /* Adjust the value as needed for your desired indentation */
+}
+
+.toc a {
+    text-decoration: none;
+}
+
+.toc a:hover {
+    text-decoration: underline;
+}
+
+.toc .subsection {
+    margin-left: 20px;
+}
